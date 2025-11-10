@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create API Key</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // ✅ Fungsi untuk meminta API key dari backend
+    async function generateApiKey() {
+      try {
+        const res = await fetch('/apikey', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        const data = await res.json()
+        document.getElementById('apiKey').value = data.apiKey
+      } catch (err) {
+        alert('Gagal membuat API key. Pastikan server berjalan.')
+        console.error(err)
+      }
+    }
+
+    // Fungsi untuk "submit" API key (simulasi)
+    function submitApiKey(event) {
+      event.preventDefault()
+      const apiKey = document.getElementById('apiKey').value
+      if (apiKey.trim() === '') {
+        alert('Silakan generate API Key terlebih dahulu.')
+        return
+      }
+      alert('API Key berhasil disimpan: ' + apiKey)
+    }
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">🔑 Create API Key</h1>
+    
+    <form onsubmit="submitApiKey(event)" class="space-y-4">
+      <div>
+        <label for="apiKey" class="block text-gray-700 font-medium mb-2">API Key</label>
+        <input id="apiKey" name="apiKey" type="text" 
+               class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Click 'Generate' to create a key" readonly />
+      </div>
+
+      <div class="flex justify-between">
+        <button type="button" onclick="generateApiKey()" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+          Generate
+        </button>
+        <button type="submit" 
+                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition">
+          Save Key
+        </button>
+      </div>
+    </form>
+
+    <p class="text-gray-500 text-sm mt-6 text-center">
+      Your API key will be used to authenticate requests to the system.
+    </p>
+  </div>
+</body>
+</html>
